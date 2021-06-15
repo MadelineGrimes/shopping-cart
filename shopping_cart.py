@@ -6,10 +6,16 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 load_dotenv()
+
+
+
+
+
 #Sendgrid API
 #Status code 202 means the email was successfully sent
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
 SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
+SENDGRID_TEMPLATE_ID = os.getenv("SENDGRID_TEMPLATE_ID", default="OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
 
 client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
 print("CLIENT:", type(client))
@@ -33,18 +39,6 @@ try:
 except Exception as err:
     print(type(err))
     print(err)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -101,6 +95,9 @@ next_row_number = len(rows) + 2
 response = sheet.insert_row(new_values, next_row_number)
 #print("RESPONSE:", type(response))
 #print(response)
+
+
+
 
 
 #Beginning of Shopping Cart User Input
