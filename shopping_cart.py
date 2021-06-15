@@ -58,13 +58,15 @@ print(response)
 #Beginning of Shopping Cart User Input
 
 #Store the results of the input process in the selected ID variable
-selected_id = input("Please enter a product ID: ") #Product ID is a string
-#print(selected_id)
-#print(type(selected_id))
+while True:
+    selected_id = input("Please enter a product ID: ") #Product ID is a string
+    if selected_id == "DONE":
+        break
+    else:
 #Look up the corresponding product from the list using list comprehension - filter items to a subset that match a certain condition
-matching_products = [p for p in SHEET_NAME if str(p["id"]) == str(selected_id)]
-matching_product = matching_products[0]
-print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"])
+        matching_products = [p for p in SHEET_NAME if str(p["id"]) == str(selected_id)]
+        matching_product = matching_products[0]
+        print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"])
 #Remember to convert numbers to strings what concatinating them 
 
 
