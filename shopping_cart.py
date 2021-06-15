@@ -136,6 +136,9 @@ while True:
 #Define this variable somewhere above the loop
 
 #Separate fetching product names and prices in its own process
+matching_products = matching_products = [p for p in rows if str(p["id"]) == str(selected_id)]
+matching_product = matching_products[0]
+
 try:
     matching_products = [p for p in rows if str(p["id"]) == str(selected_id)]
     matching_product = matching_products[0]
@@ -148,7 +151,7 @@ except IndexError:
 
     #print[float("TOTAL PRICE: " + str(total_price))]
     print("+: " + matching_product["name"] + " " + str(matching_product["price"])
-    print("Subtotal: " + str(total_price))
+    print("Subtotal: " + str(total_price)
     print("Plus NYC Sales Tax (8.75%):", (TAX_RATE)
     print("Total:", + str(total_price) + (TAX_RATE))
     print("________________________")
