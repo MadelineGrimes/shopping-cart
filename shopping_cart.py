@@ -58,6 +58,8 @@ print(response)
 #Beginning of Shopping Cart User Input
 
 #Store the results of the input process in the selected ID variable
+total_price = 
+
 while True:
     selected_id = input("Please enter a product ID: ") #Product ID is a string
     if selected_id == "DONE":
@@ -66,20 +68,10 @@ while True:
 #Look up the corresponding product from the list using list comprehension - filter items to a subset that match a certain condition
         matching_products = [p for p in SHEET_NAME if str(p["id"]) == str(selected_id)]
         matching_product = matching_products[0]
+        total_price = total_price + (matching_product["price"]) 
         print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"])
 #Remember to convert numbers to strings what concatinating them 
 
-
-#Accept and print individual user input values
-#Use a while loop
-i = 1
-while i < 898248001107:
-    print(i)
-    if i == DONE:
-        break
-    i += 1
-
-
-#Use if/else statement with a break keyword once DONE is entered
-
-
+#Define this variable somewhere above the loop
+total_price = 0 
+print("TOTAL PRICE: " + str(total_price))
