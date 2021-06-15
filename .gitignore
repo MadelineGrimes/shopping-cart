@@ -133,6 +133,6 @@ dmypy.json
 .env
 
 # ignore the google api credentials file at the following location:
-shopping-cart/google-credentials.json
+google-credentials.json
 
 
