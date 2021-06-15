@@ -1,8 +1,55 @@
 import os
 from dotenv import load_dotenv
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-load_dotenv
+
+load_dotenv()
+#Sendgrid API
+#Status code 202 means the email was successfully sent
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
+SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
+
+client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
+print("CLIENT:", type(client))
+
+subject = "Your Receipt from Madeline's Grocery Shoppe"
+
+html_content = "Thank you for visiting today. Please see your itemized receipt below."
+print("HTML:", html_content)
+
+#to_emails value is customizable to any email address
+message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS, subject=subject, html_content=html_content)
+
+try:
+    response = client.send(message)
+
+    print("RESPONSE:", type(response)) #> <class 'python_http_client.client.Response'>
+    print(response.status_code) 
+    print(response.body)
+    print(response.headers)
+
+except Exception as err:
+    print(type(err))
+    print(err)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #Google API Authorization 
 DOCUMENT_ID = "1ItN7Cc2Yn4K90cMIsxi2P045Gzw0y2JHB_EkV4mXXpI"
 SHEET_NAME = "products"
