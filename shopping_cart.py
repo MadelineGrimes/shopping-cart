@@ -5,7 +5,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 load_dotenv
 #Google API Authorization 
 DOCUMENT_ID = "1ItN7Cc2Yn4K90cMIsxi2P045Gzw0y2JHB_EkV4mXXpI"
-SHEET_NAME = "Shopping Cart Project - Datastore (PUBLIC)"
+SHEET_NAME = "products"
+TAX_RATE = "0.0875"
 CREDENTIALS_FILEPATH = '/Users/madelinegrimes/Documents/GitHub/shopping-cart/google-credentials.json'
 AUTH_SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets", #> Allows read/write access to the user's sheets and their properties.
@@ -14,7 +15,7 @@ AUTH_SCOPE = [
 credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILEPATH, AUTH_SCOPE)
 print("CREDS:", type(credentials)) #> <class 'oauth2client.service_account.ServiceAccountCredentials'>
 client = gspread.authorize(credentials)
-print("CLIENT:", type(client))
+#print("CLIENT:", type(client))
 
 #Read sheet values
 
@@ -22,13 +23,13 @@ print("-----------------")
 print("READING DOCUMENT...")
 
 doc = client.open_by_key(DOCUMENT_ID)
-print("DOC:", type(doc), doc.title) #> <class 'gspread.models.Spreadsheet'>
+#print("DOC:", type(doc), doc.title) #> <class 'gspread.models.Spreadsheet'>
 
 sheet = doc.worksheet(SHEET_NAME)
-print("SHEET:", type(sheet), sheet.title)#> <class 'gspread.models.Worksheet'>
+#print("SHEET:", type(sheet), sheet.title)#> <class 'gspread.models.Worksheet'>
 
 rows = sheet.get_all_records()
-print("ROWS:", type(rows)) #> <class 'list'>
+#print("ROWS:", type(rows)) #> <class 'list'>
 
 for row in rows:
     print(row)
@@ -46,32 +47,71 @@ new_row = {
 }
 print(new_row)
 
-print("-----------------")
-print("WRITING VALUES TO DOCUMENT...")
+#print("________________________")
+#print("WRITING VALUES TO DOCUMENT...")
 new_values = list(new_row.values())
 next_row_number = len(rows) + 2
 response = sheet.insert_row(new_values, next_row_number)
-print("RESPONSE:", type(response))
-print(response)
+#print("RESPONSE:", type(response))
+#print(response)
 
 
 #Beginning of Shopping Cart User Input
 
+from datetime import datetime
+
+now = datetime.now()
+
+
 #Store the results of the input process in the selected ID variable
-total_price = 
+print("________________________")
+print("Madeline's Grocery Shoppe")
+print("________________________")
+print("Website: madelinegrocery.com")
+print("Phone: 212.000.0000")
+current_time = now.strftime("%H:%M:%S")
+print("Time:", current_time)
+
+total_price = 0
+selected_ids = []
+
+def to_usd(total_price):
+    return f"${total_price:,.2f}".format(total_price)
+
 
 while True:
     selected_id = input("Please enter a product ID: ") #Product ID is a string
     if selected_id == "DONE":
         break
     else:
+        selected_ids.append(selected_id)
 #Look up the corresponding product from the list using list comprehension - filter items to a subset that match a certain condition
-        matching_products = [p for p in SHEET_NAME if str(p["id"]) == str(selected_id)]
-        matching_product = matching_products[0]
-        total_price = total_price + (matching_product["price"]) 
-        print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"])
 #Remember to convert numbers to strings what concatinating them 
 
+#print = selected_ids
 #Define this variable somewhere above the loop
-total_price = 0 
-print("TOTAL PRICE: " + str(total_price))
+
+#Separate fetching product names and prices in its own process
+try:
+    matching_products = [p for p in rows if str(p["id"]) == str(selected_id)]
+    matching_product = matching_products[0]
+    
+except IndexError:
+    print("INVALID PRODUCT ID")
+    
+    total_price = total_price + matching_product["price"]
+    #print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"])
+
+    #print[float("TOTAL PRICE: " + str(total_price))]
+    print("+: " + matching_product["name"] + " " + str(matching_product["price"])
+    print("Subtotal: " + str(total_price))
+    print("Plus NYC Sales Tax (8.75%):", (TAX_RATE)
+    print("Total:", + str(total_price) + (TAX_RATE))
+    print("________________________")
+    print("Thanks for stopping by! See you soon.")
+
+
+
+
+
+
