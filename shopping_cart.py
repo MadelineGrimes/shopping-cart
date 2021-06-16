@@ -85,8 +85,7 @@ print("Madeline's Grocery Shoppe")
 print("________________________")
 print("Website: madelinegrocery.com")
 print("Phone: 212.000.0000")
-current_time = now.strftime("%H:%M:%S")
-print("Time:", current_time)
+
 total_price = 0
 selected_ids = []
 def to_usd(total_price):
@@ -103,6 +102,7 @@ while True:
         matching_products = [p for p in rows if str(p["id"]) == str(selected_id)]
         if any(matching_products):
             selected_ids.append(matching_products[0])
+            print(matching_products, "name", "price")
         else:
             print("Invalid entry, please try again.")
 
