@@ -7,7 +7,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 load_dotenv()
 
 
-
 #Sendgrid API
 #Status code 202 means the email was successfully sent
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
@@ -77,7 +76,6 @@ response = sheet.insert_row(new_values, next_row_number)
 
 
 
-
 #Beginning of Shopping Cart User Input
 from datetime import datetime
 now = datetime.now()
@@ -93,35 +91,43 @@ total_price = 0
 selected_ids = []
 def to_usd(total_price):
     return "${total_price:,.2f}".format(total_price)
+
+
+#Nest inside a new loop with selected IDs 
+selected_products = []
 while True:
     selected_id = input("Please enter a product ID: ") #Product ID is a string
-    if selected_id == "DONE":
+    if selected_id.upper() == "DONE":
         break
     else:
-        selected_ids.append(selected_id)
+        matching_products = [p for p in rows if str(p["id"]) == str(selected_id)]
+        if any(matching_products):
+            selected_ids.append(matching_products[0])
+        else:
+            print("Invalid entry, please try again.")
+
+checkout_time = datetime.now()
+def to_usd(price):
+    return f"$(price:,.2f)"
+
+subtotal = sum([float(p["price"]) for p in selected_products])     
+
 #Look up the corresponding product from the list using list comprehension - filter items to a subset that match a certain condition
 #Remember to convert numbers to strings what concatinating them 
 #print = selected_ids
 #Define this variable somewhere above the loop
 #Separate fetching product names and prices in its own process
-matching_products = [p for p in rows if p["id"] == int(selected_id)]
-matching_product = matching_products[0]
-try:
-    matching_products = [p for p in rows if str(p["id"]) == str(selected_id)]
-    matching_product = matching_products[0]
-except IndexError:
-    print("INVALID PRODUCT ID")
-    total_price = total_price + matching_product["price"]
-    #print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"])
-    #print[float("TOTAL PRICE: " + str(total_price))]
-    print("+: " + matching_product["name"] + " " + (matching_product["price"]))
-    print("Subtotal: " + str(total_price))
-    print("Plus NYC Sales Tax (8.75%):", (TAX_RATE))
-    print("Total:", + str(total_price) + (TAX_RATE))
-    print("________________________")
-    print("Thanks for stopping by! See you soon.")
 
 
+#print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"])
+#print[float("TOTAL PRICE: " + str(total_price))]
+print("Checkout Time: " + str(checkout_time.strftime("%Y-%M-%D %H:%m:%S")))
+for p in selected_products:
+    print("SELECTED PRODUCT: " + p["name"] + "   " + '${:.2f}'.format(p["price"]))
 
-
+print(f"Subtotal: {subtotal:,.2f}")
+print(f"Plus NYC Sales Tax (8.75%): {(subtotal * 0.0875):,.2f}")
+print(f"Total: {((subtotal * 0.0875) + subtotal):,.2f}")
+print("________________________")
+print("Thanks for stopping by! See you soon.")
 
